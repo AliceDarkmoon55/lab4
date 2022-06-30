@@ -15,12 +15,12 @@ public class Collector {
     private ThreadPool threadPool;
 
     public Collector(Storage<BodyDetail> bodyStorage, Storage<MotorDetail> motorStorage,
-                     Storage<AccessoryDetail> accessoryStorage, AutoStorage carStorage) {
+                     Storage<AccessoryDetail> accessoryStorage, AutoStorage carStorage, int workers) {
         this.bodyStorage = bodyStorage;
         this.motorStorage = motorStorage;
         this.accessoryStorage = accessoryStorage;
         this.carStorage = carStorage;
-        threadPool = new ThreadPool();
+        threadPool = new ThreadPool(workers);
     }
 
     public void collectAuto() {

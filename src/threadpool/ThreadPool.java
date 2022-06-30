@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ThreadPool implements TaskListener {
-    private static final int THREAD_COUNT = 10;
+    private final int threadCount;
 
     private final List<ThreadPoolTask> taskQueue;
     private Set<PooledThread> availableThreads;
@@ -37,11 +37,12 @@ public class ThreadPool implements TaskListener {
         }
     }
 
-    public ThreadPool() {
+    public ThreadPool(int threadCount) {
         taskQueue = new LinkedList<>();
         availableThreads = new HashSet<>();
+        this.threadCount = threadCount;
 
-        for (int i = 0; i < THREAD_COUNT; i++) {
+        for (int i = 0; i < threadCount; i++) {
             availableThreads.add(new PooledThread("Performer_" + i, taskQueue));
         }
 
@@ -51,8 +52,8 @@ public class ThreadPool implements TaskListener {
 
     }
 
-    public static int getThreadCount() {
-        return THREAD_COUNT;
+    public int getThreadCount() {
+        return threadCount;
     }
 
     public List<ThreadPoolTask> getTaskQueue() {

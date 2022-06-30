@@ -40,7 +40,7 @@ public class Main {
         }
 
         AutoStorage autoStorage = new AutoStorage(parser.getAutoStorageSize());
-        Collector collector = new Collector(bodyStorage, motorStorage, accessoryStorage, autoStorage);
+        Collector collector = new Collector(bodyStorage, motorStorage, accessoryStorage, autoStorage, parser.getWorkers());
         AutoSale autoSale = new AutoSale(autoStorage, parser.getDealers(), parser.getDealerMinDelay(), isLogging);
 
         new Thread(new UserInterface(collector,autoSale, parser)).start();
