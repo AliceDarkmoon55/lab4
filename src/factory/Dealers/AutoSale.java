@@ -9,18 +9,20 @@ public class AutoSale implements Runnable {
     private int dealersDelay;
     private AutoStorage autoStorage;
     private LinkedList<Dealer> dealers;
+    private boolean needLogs;
 
-    public AutoSale(AutoStorage autoStorage, int DEALER_COUNT, int dealersDelay) {
+    public AutoSale(AutoStorage autoStorage, int DEALER_COUNT, int dealersDelay, boolean needLogs) {
         this.DEALER_COUNT = DEALER_COUNT;
         this.dealersDelay = dealersDelay;
         this.autoStorage = autoStorage;
         this.dealers = new LinkedList<>();
+        this.needLogs = needLogs;
     }
 
     @Override
     public void run() {
         for (int i = 0; i < DEALER_COUNT; i++) {
-            Dealer dealer = new Dealer(autoStorage, dealersDelay);
+            Dealer dealer = new Dealer(autoStorage, dealersDelay, needLogs);
             dealers.add(dealer);
             new Thread(dealer, String.valueOf(i)).start();
         }

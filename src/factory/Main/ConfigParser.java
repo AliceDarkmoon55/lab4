@@ -3,6 +3,7 @@ package factory.Main;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class ConfigParser {
@@ -23,7 +24,7 @@ public class ConfigParser {
     private int workers;
     private int dealers;
 
-    private boolean logFile;
+    private boolean needLogs = false;
 
     static {
         try {
@@ -35,96 +36,94 @@ public class ConfigParser {
         }
     }
 
+    private boolean ifLogging (String value) {
+        return value == null && needLogs;
+    }
+
     public ConfigParser() {
         String value = null;
 
+        value = p.getProperty("NeedLogs");
+        if (value != null) {
+            needLogs = Boolean.valueOf(value);
+        }
+
         value = p.getProperty("BodyStorageSize");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read BodyStorageSize from properties file");
         } else {
             bodyStorageSize = Integer.valueOf(value);
         }
 
         value = p.getProperty("MotorStorageSize");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read MotorStorageSize from properties file");
         } else {
             motorStorageSize = Integer.valueOf(value);
         }
 
         value = p.getProperty("AccessoryStorageSize");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read AccessoryStorageSize from properties file");
         } else {
             accessoryStorageSize = Integer.valueOf(value);
         }
 
         value = p.getProperty("AutoStorageSize");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read AutoStorageSize from properties file");
         } else {
             autoStorageSize = Integer.valueOf(value);
         }
 
         value = p.getProperty("BodySupplierMinDelay");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read BodySupplierMinDelay from properties file");
         } else {
             bodySupplierMinDelay = Integer.valueOf(value);
         }
 
         value = p.getProperty("MotorSupplierMinDelay");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read MotorSupplierMinDelay from properties file");
         } else {
             motorSupplierMinDelay = Integer.valueOf(value);
         }
 
         value = p.getProperty("AccessorySupplierMinDelay");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read AccessorySupplierMinDelay from properties file");
         } else {
             accessorySupplierMinDelay = Integer.valueOf(value);
         }
 
         value = p.getProperty("DealerMinDelay");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read DealerMinDelay from properties file");
         } else {
             dealerMinDelay = Integer.valueOf(value);
         }
 
         value = p.getProperty("AccessorySuppliers");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read AccessorySuppliers from properties file");
         } else {
             accessorySuppliers = Integer.parseInt(value);
         }
 
         value = p.getProperty("Workers");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read Workers from properties file");
         } else {
             workers = Integer.valueOf(value);
         }
 
         value = p.getProperty("Dealers");
-        if (value == null) {
-            writeLog();
+        if (ifLogging(value)) {
+            log.severe("Couldn't read Dealers from properties file");
         } else {
             dealers = Integer.valueOf(value);
         }
-
-        value = p.getProperty("LogFile");
-        if (value == null) {
-            writeLog();
-        } else {
-            logFile = Boolean.valueOf(value);
-        }
-    }
-
-    public void writeLog() {
-        log.severe("Couldn't read value from properties file");
     }
 
     public int getBodyStorageSize() {
@@ -171,7 +170,7 @@ public class ConfigParser {
         return dealers;
     }
 
-    public boolean isLogFile() {
-        return logFile;
+    public boolean isNeedLogs() {
+        return needLogs;
     }
 }

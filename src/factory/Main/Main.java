@@ -10,9 +10,16 @@ import factory.Storages.AutoStorage;
 import factory.Storages.Storage;
 import factory.UI.UserInterface;
 
+import java.io.IOException;
+import java.util.logging.LogManager;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ConfigParser parser = new ConfigParser();
+        boolean isLogging = parser.isNeedLogs();
+        if (isLogging) {
+            LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/logging.properties"));
+        }
 
         Storage<BodyDetail> bodyStorage = new Storage<>(parser.getBodyStorageSize(),
                 parser.getBodySupplierMinDelay(),
@@ -34,7 +41,7 @@ public class Main {
 
         AutoStorage autoStorage = new AutoStorage(parser.getAutoStorageSize());
         Collector collector = new Collector(bodyStorage, motorStorage, accessoryStorage, autoStorage);
-        AutoSale autoSale = new AutoSale(autoStorage, parser.getDealers(), parser.getDealerMinDelay());
+        AutoSale autoSale = new AutoSale(autoStorage, parser.getDealers(), parser.getDealerMinDelay(), isLogging);
 
         new Thread(new UserInterface(collector,autoSale, parser)).start();
         new Thread(new CollectorController(collector)).start();
